@@ -6,14 +6,14 @@
       <div class="home-list-one">
         <div class="home-item" @click="goSub('1','/book-fullmark')">满分教育预约</div>
         <div class="home-item" @click="goSub('1','/book-exam')">审验教育预约</div>
-        <div class="home-item" @click="goSub('1','/book-pra')">体验教育预约</div>
-        <div class="home-item" @click="goSub('1','/book-fullmark')">参加体验教育</div>
+        <div class="home-item" @click="goSub('3','/book-pra')">敬请期待</div>
+        <div class="home-item" @click="goSub('3','/book-fullmark')">敬请期待</div>
       </div>
       <div class="home-list-two">
         <div class="home-item" @click="goSub('1','/self-info')">个人信息</div>
         <div class="home-item" @click="goSub('1','/book-list')">我的预约单</div>
         <div class="home-item" @click="goSub('2','/audit-query')">审核状态查询</div>
-        <div class="home-item" @click="goSub('2','/update')">修改手机号码</div>
+        <div class="home-item" @click="goSub('3','')">敬请期待</div>
       </div>
 
     </div>

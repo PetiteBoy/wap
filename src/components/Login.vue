@@ -5,28 +5,17 @@
       登录驾驶人用户
     </div>
     <div class="page-main">
-      <div class=" page-item">
-        <el-select v-model="idType" placeholder="请选择证件类型">
-          <el-option v-for="item in IDList" :key="item.type" :label="item.name" :value="item.type">
-          </el-option>
-        </el-select>
-      </div>
-      <div class="page-item">
-        <el-input :disabled="!idType" v-model="idNo" placeholder="请输入证件号"></el-input>
-      </div>
       <!-- 获取验证码 -->
       <GetCode :type="'login'"></GetCode>
       <div class="login-btn page-item">
         <el-button type="primary" @click="login()" :disabled="loginBtnStatu">登录</el-button>
       </div>
-
+      <!-- 登录页跳转其他功能 -->
       <div class="login-other">
         <div @click="reg()">注册用户</div>
-        <div @click="update()">更换手机</div>
         <div @click="auditQuery()">查询审核状态</div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -40,11 +29,7 @@ export default {
   },
   data() {
     return {
-      headerTitle: '登录',
-      //  证件类别
-      idType: '',
-      //   证件编号
-      idNo: ''
+      headerTitle: '登录'
     }
   },
   computed: {
@@ -66,14 +51,8 @@ export default {
     verifyCode() {
       return this.$store.state.login.verify.code
     },
-    getCodeBtnStatus() {
-      return !checkPhone(this.phone)
-    },
-    IDList() {
-      return this.$store.state.data.IDList
-    },
     loginBtnStatu() {
-      if (this.idType && this.idNo && this.phone && this.verifyCode) {
+      if (this.phone && this.verifyCode) {
         return false
       } else {
         return true
@@ -83,9 +62,23 @@ export default {
   watch: {
     apiStatus() {
       if (this.apiType === 'login') {
+        let title = ''
+        let content = ''
+        let btn = []
+        let path = ''
         if (this.apiStatus !== '0x0000') {
-          alert(this.apiMsg)
+          title = '登录失败'
+          content = this.apiMsg
+          btn = ['知道了']
+          path = ['']
+          this.$store.dispatch('updateDialog', {
+            title,
+            content,
+            btn,
+            path
+          })
           this.$store.dispatch('resetApi')
+          this.$store.dispatch('updateDialogStatus', true)
         } else {
           this.pageChage('/home')
         }
@@ -104,10 +97,6 @@ export default {
     // 注册
     reg() {
       this.pageChage('/reg')
-    },
-    // 修改信息
-    update() {
-      this.pageChage('/update')
     },
     // 查询状态
     auditQuery() {

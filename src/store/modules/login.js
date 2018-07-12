@@ -5,19 +5,18 @@ const state = {
   // 用户登录之后的token
   authKey: '',
   // 用户的登录状态
-  loginStatus: '',
-  // 审验结果获取状态
-  auditQueryStatus: false,
+  loginStatus: true,
   // 审核状态数据
   auditQueryData: {},
-
+  // 审核状态查询返回的token
+  auditQueryToken: '',
 
 
   // api
   api: {
     status: '',
     msg: '',
-    type: ''
+    type: '' // login reg
   },
   // 验证码相关
   verify: {
@@ -117,15 +116,9 @@ const actions = {
         msg: result.message,
         type: 'login'
       })
-      // if (result.status === '0x0000') {
-      //   commit('UPDATE_LOGIN_STATUS', true)
-      // } else {
-      //   commit('UPDATE_LOGIN_STATUS', false)
-      //   commit('UPDATE_ERR_MSG', result.message)
+
       // }
     }).catch((err => {
-      // commit('UPDATE_LOGIN_STATUS', false)
-      // commit('UPDATE_ERR_MSG', '服务异常请稍后再试')
       console.log('[httpService-userLogin-fail]', err)
     }))
   },
@@ -146,7 +139,13 @@ const actions = {
     commit
   }, params) {
     httpService.auditQuery(params).then((res) => {
-      commit('UPDATE_AUDIT_QUERY_STATUS', true)
+      let result = res.data
+      commit('UPDATE_API', {
+        status: result.status,
+        msg: result.message,
+        type: 'auditstate'
+      })
+      // commit('UPDATE_AUDIT_QUERY_STATUS', true)
       // 更新审验数据
       // commit('GET_AUDIT_QUERY_DATA', )
       console.log('[httpService-auditQuery-success]', res)
@@ -156,7 +155,20 @@ const actions = {
     }))
   },
   //   修改注册用户
-  userUpdate() {}
+  registerUpdate({
+    commit
+  }, params) {
+    httpService.registerUpdate(params).then((res) => {
+      let result = res.data
+      commit('UPDATE_API', {
+        status: result.status,
+        msg: result.message,
+        type: 'update'
+      })
+    }).catch(err => {
+      console.log('[httpService-registerUpdate-fail]', err)
+    })
+  }
 }
 export default {
   state,

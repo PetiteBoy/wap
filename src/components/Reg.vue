@@ -16,7 +16,7 @@
       </div>
       <!-- 请输入证件号 -->
       <div class="page-item">
-        <el-input :disabled="!idType" v-model="idNo" placeholder="请输入证件号"></el-input>
+        <el-input :disabled="!idType" v-model="idNo" placeholder="请输入证件号" type="number"></el-input>
       </div>
       <!-- 请选择准驾车型 -->
       <div class=" page-item">
@@ -126,9 +126,6 @@ export default {
     licenseList() {
       return this.$store.state.data.licenseList
     },
-    getCodeBtnStatus() {
-      return !checkPhone(this.phone)
-    },
     regBtnStatus() {
       if (this.idType && this.idNo && this.licenseType && this.licenseNo && this.licenseBeginDate && this.licenseEndDate && this.phone && this.verifyCode) {
         return false
@@ -140,12 +137,37 @@ export default {
   watch: {
     apiStatus() {
       if (this.apiType === 'register') {
-        if (this.apiStatus !== '0x0000') {
-          alert(this.apiMsg)
+        let title = ''
+        let content = ''
+        let btn = []
+        let path = []
+        if (this.apiStatus === '0x8001') {
+          title = '注册信息提交失败'
+          content = this.apiMsg
+          btn = ['前往登录']
+          path = ['login']
           this.$store.dispatch('resetApi')
+        } else if (this.apiStatus === '0x0000') {
+          title = '注册信息提交成功'
+          content = '您的注册信息已提交，2个工作日内完成审核。完成审核后，我们将会短信通知您，届时请登录系统开始预约。'
+          btn = ['知道了']
+          path = ['']
         } else {
-          this.$router.push('/login')
+          title = '注册信息提交失败'
+          content = this.apiMsg
+          btn = ['知道了']
+          path = ['login']
+          this.$store.dispatch('resetApi')
         }
+
+        this.$store.dispatch('updateDialog', {
+          title,
+          content,
+          btn,
+          path
+        })
+
+        this.$store.dispatch('updateDialogStatus', true)
       }
     }
   },
@@ -182,8 +204,8 @@ export default {
 }
 </script>
 <style>
-.el-date-editor.el-input,
-.el-date-editor.el-input__inner {
+.page-item .el-date-editor.el-input,
+.page-item .el-date-editor.el-input__inner {
   width: 100%;
 }
 </style>
