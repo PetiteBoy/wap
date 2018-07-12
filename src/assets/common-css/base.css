@@ -1,0 +1,36 @@
+.page-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.page-main {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.page-main .el-select {
+  width: 100%;
+}
+
+.page-item {
+  margin-top: 15px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.get-btn .el-input {
+  float: left;
+  width: 210px;
+}
+
+.get-btn .el-button {
+  float: left;
+  margin-left: 20px;
+}
+
+.page-tips {
+  font-size: 12px;
+}
